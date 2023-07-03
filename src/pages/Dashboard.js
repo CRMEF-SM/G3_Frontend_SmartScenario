@@ -2,52 +2,155 @@ import React, { useState, useEffect, useContext } from 'react'
 import "./Dashboard.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import axiosInstance from '../axios';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { ActivityContext, ActivityProvider } from '../utils/ActivityContext';
+import { useNavigate } from 'react-router-dom';
+import Getactivities from './getactivities';
+import Activitie from './Activities';
+import Alert from 'react-bootstrap/Alert';
+
 
 const Dashboard = () => {
+
+  const handleShow = () => setShow(true);
   const [activeTab, setActiveTab] = useState("Accueil");
   const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const initialInputs = [
-    { name: 'etablissement', placeholder: 'Votre établissement', value: '', duplicated: false },
-    { name: 'cours', placeholder: 'Le cours', value: '', duplicated: false },
-    { name: 'nbHeures', placeholder: 'Le nombre d\'heure', value: '', duplicated: false },
-    { name: 'Compétence_visée', placeholder: 'La compétence visée', value: '', duplicated: false },
-    { name: 'objectifs_pédagogiques', placeholder: 'Objectifs pédagogiques', value: '', duplicated: false },
-    { name: 'durée', placeholder: 'Durée', value: '', duplicated: false },
-    { name: 'activités_apprenant', placeholder: 'Activités apprenant', value: '', duplicated: false },
-    { name: 'activités_enseignant', placeholder: 'Activités enseignant', value: '', duplicated: false }
-  ];
+  const [showModal, setShowModal] = useState(false);
+  const [input1, setInput1] = useState('');
+  const [input2, setInput2] = useState('');
+  const [input3, setInput3] = useState('');
+  const [input4, setInput4] = useState('');
+  const [input5, setInput5] = useState('');
+  const [textareaValue, setTextareaValue] = useState('');
+  const [resources, setResources] = useState([]);
   
-  const [inputs, setInputs] = useState(initialInputs);
-  
-  const handleInputChange = (index, event) => {
-    const updatedInputs = [...inputs];
-    updatedInputs[index].value = event.target.value;
-    setInputs(updatedInputs);
+  const handleCreateActivity = () => {
+    setShowModal(true);
   };
   
-  const addInputRow = (index) => {
-    const updatedInputs = [...inputs];
-    const newInput = { ...inputs[index], duplicated: true };
-    updatedInputs.splice(index + 1, 0, newInput);
-    setInputs(updatedInputs);
+  const handleAddResource = () => {
+    setResources([...resources, input5]);
+    setInput5('');
   };
   
-  const removeInputRow = (index) => {
-    const updatedInputs = [...inputs];
-    updatedInputs.splice(index, 1);
-    setInputs(updatedInputs);
+  const handleRemoveResource = (index) => {
+    const updatedResources = [...resources];
+    updatedResources.splice(index, 1);
+    setResources(updatedResources);
   };
   
-  const handleSubmit = (event) => {
+  /*const handleSubmit = (event) => {
     event.preventDefault();
-    // Logique de traitement du formulaire ici
-  };
+    // Mettre les valeurs des inputs
+    console.log('Valeur de l\'input 1:', input1);
+    console.log('Valeur de l\'input 2:', input2);
+    console.log('Valeur de l\'input 3:', input3);
+    console.log('Valeur de l\'input 3:', input4);
+    console.log('Valeur de l\'input 3:', input5);
+    // Réinitialisez les inputs
+    setInput1('');
+    setInput2('');
+    setInput3('');
+    setInput4('');
+    setInput5('');
+    setTextareaValue('');
+    // Fermeture du modal
+    setShowModal(false);
+  };*/
   
+  const [isEditing, setIsEditing] = useState(false);
+  const handleEdit = () => {
+    setIsEditing(true);
+    setShowEditModal(true);
+  };
+  const [showEditModal, setShowEditModal] = useState(false);
+  
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    //la logique de éditer
+    setShowEditModal(false);
+  };
+
+/////////////////////
+
+const [activities, setActivities] = useState([]);
+const [tableData, setTableData] = useState([]);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    // Code pour créer une nouvelle activité
+    const response = await fetch('activite/create/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        niveau: input1,
+        matiere: input2,
+        lecon: input3,
+        titre: input4,
+        ressources: resources,
+        contenu: textareaValue,
+      }),
+    });
+
+    if (response.ok) {
+      const newActivity = await response.json();
+
+      // Ajouter la nouvelle activité à l'état "activities"
+      setActivities([...activities, newActivity]);
+
+      setShowModal(false);
+
+      // Ajouter les informations de l'activité dans la table
+      const newActivityData = {
+        id: newActivity.id,
+        nom: newActivity.titre,
+        niveau: newActivity.niveau,
+        lecon: newActivity.lecon,
+        dateCreation: newActivity.dateCreation,
+      };
+
+      setTableData([...tableData, newActivityData]);
+      // Réinitialiser les champs du formulaire
+      setInput1('');
+      setInput2('');
+      setInput3('');
+      setInput4('');
+      setResources([]);
+      setTextareaValue('');
+    } else {
+      console.log("Erreur lors de la création de l'activité");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+useEffect(() => {
+  const fetchActivities = async () => {
+    try {
+      // Envoyer une requête GET pour récupérer la liste des activités
+      const response = await fetch('`activite/create/`');
+      if (response.ok) {
+        const data = await response.json();
+        setActivities(data);
+      } else {
+        console.log('Erreur lors du chargement des activités');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchActivities();
+}, []);
+
 
     return (
 
@@ -155,7 +258,7 @@ const Dashboard = () => {
                 <Button
                   variant="primary"
                   onClick={handleShow}
-                  style={{ backgroundColor: "#0BA7AA", borderColor: "#0BA7AA" }}>
+                  style={{ backgroundColor: "#0BA7AA", borderColor: "#0BA7AA" ,color:"white"}}>
                   créer scénario
                 </Button>
                </div>
@@ -208,151 +311,316 @@ const Dashboard = () => {
   
         </div>    
         </div>  
-        <Modal show={show} onHide={handleClose} size="lg" className="modal-fullscreen">
-            <Modal.Header closeButton>
-              <Modal.Title>Créer un scénario pédagogique</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <form onSubmit={handleSubmit}>
-                {inputs.map((input, index) => (
-                  <div className="row mb-3" key={index}>
-                    <div className="col-4">
-                      <input
-                        type="text"
-                        className="form-control"
-                        name={input.name}
-                        placeholder={input.placeholder}
-                        value={input.value}
-                        onChange={(event) => handleInputChange(index, event)}
-                      />
-                    </div>
-                    {input.duplicated && (
-                      <div className="col-4">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name={input.name + index} // Utilisation de l'index pour le nom unique
-                          placeholder={input.placeholder}
-                          value={input.value}
-                          onChange={(event) => handleInputChange(index, event)}
-                        />
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger btn-sm"
-                          onClick={() => removeInputRow(index)}
-                        >
-                          x
-                        </button>
-                      </div>
-                    )}
-                    <div className="col-4">
-                      {!input.duplicated && index >= 4 && (
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-sm"
-                          onClick={() => addInputRow(index)}
-                        >
-                          +
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-                <button
-                  type="submit"
-                  className="btn btn-success mt-4"
-                  style={{ backgroundColor: '#0BA7AA', borderColor: '#0BA7AA' }}
-                >
-                  Créer
-                </button>
-              </form>
-
-
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Fermer
-              </Button>
-              <Button variant="primary" onClick={handleClose}>
-                Sauvegarder
-              </Button>
-            </Modal.Footer>
-          </Modal>
+        
 
 
   </section>
   
       )}
       {activeTab === "Mes activités" && (
+        //view activité
           <section>
-          <div class="container ">
-             <div className="crud shadow-lg p-3 mb-5 mt-5 bg-body rounded"> 
-             <div class="row ">
-              
-              <div class="col-sm-2 mt-5 mb-4 text-gred">
-                 <div className="search">
-                   <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Search"/>
-                   
-                   </form>
-                 </div>    
-               </div>  
-                 <div class="col-sm-5 offset-sm-2 mt-5 mb-4 text-gred" style={{color:"green"}}><h2><b>Liste des activités crées</b></h2></div>
-                 <div class="col-sm-2 offset-sm-1  mt-5 mb-4 text-gred">
-                 <Button variant="primary" onClick="" style={{ backgroundColor: "#0BA7AA",borderColor:"#0BA7AA"}}>
-                    créer activité
-                 </Button>
-                </div>
-              </div>  
-               <div class="row">
-                   <div class="table-responsive " >
+              <div class="container">
+                <div className="crud shadow-lg p-3 mb-5 mt-5 bg-body rounded">
+                  <div class="row">
+                    <div class="col-sm-2 mt-5 mb-4 text-gred">
+                      <div className="search">
+                        <form class="form-inline">
+                          <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Search" />
+
+                        </form>
+                      </div>
+                    </div>
+                    <div class="col-sm-5 offset-sm-2 mt-5 mb-4 text-gred" style={{ color: "green" }}>
+                      <h2><b>Liste des activités créées</b></h2>
+                    </div>
+                    <div class="col-sm-2 offset-sm-1  mt-5 mb-4 text-gred">
+                      <Button variant="primary" onClick={handleCreateActivity} style={{ backgroundColor: "#0BA7AA",color:"white", borderColor: "#0BA7AA" }}>
+                        Créer activité
+                      </Button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered">
-                       <thead>
-                           <tr>
-                               <th>#</th>
-                               <th>Activité pédagogique </th>
-                               <th>Niveau</th>
-                               <th>Leçon </th>
-                               <th>Datre de création </th>
-                               <th>Actions</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           
-                           <tr>
-                               <td>1</td>
-                               <td>Activié pédagogique01</td>
-                               <td>1APIC</td>
-                               <td>Structure d'un ordinateur</td>
-                               <td>01/10/2023</td>
-                               <td>
-                                  <a href="#" class="view" title="View" data-toggle="tooltip" style={{color:"#0BA7AA"}}><i class="material-icons">&#xE417;</i></a>
-                                   <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                   <a href="#" class="delete" title="Delete" data-toggle="tooltip" style={{color:"red"}}><i class="material-icons">&#xE872;</i></a>
-                                    
-                               </td>
-                           </tr>
-                           <tr>
-                               <td>2</td>
-                               <td>Activié pédagogique02</td>
-                               <td>2APIC</td>
-                               <td>Tableur</td>
-                               <td>12/02/2023</td>
-                               <td>
-                               <a href="#" class="view" title="View" data-toggle="tooltip" style={{color:"#0BA7AA"}}><i class="material-icons">&#xE417;</i></a>
-                                   <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                   <a href="#" class="delete" title="Delete" data-toggle="tooltip" style={{color:"red"}}><i class="material-icons">&#xE872;</i></a>
-                               </td>
-                           </tr>
-    
-                       </tbody>
-                   </table>
-               </div>   
-           </div>  
-   
-         </div>    
-         </div>  
-    
+                              <thead>
+                                  <tr>
+                                  <th>#</th>
+                                  <th>Activité pédagogique</th>
+                                  <th>Niveau</th>
+                                  <th>Leçon</th>
+                                  <th>Date de création</th>
+                                  <th>Actions</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                {activities.map((activity, index) => (
+                                  <tr key={index}>
+                                    <td>{activity.id}</td>
+                                    <td>{activity.nom}</td>
+                                    <td>{activity.niveau}</td>
+                                    <td>{activity.lecon}</td>
+                                    <td>{activity.dateCreation}</td>
+                                    <td>
+                                      <a href="#" className="view" title="View" data-toggle="tooltip" style={{ color: "#0BA7AA" }}>
+                                        <i className="material-icons">&#xE417;</i>
+                                      </a>
+                                      <a href="#" className="edit" title="Edit" data-toggle="tooltip">
+                                        <i className="material-icons">&#xE254;</i>
+                                      </a>
+                                      <a href="#" className="delete" title="Delete" data-toggle="tooltip" style={{ color: "red" }}>
+                                        <i className="material-icons">&#xE872;</i>
+                                      </a>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+         {/* Modal créer */}
+         <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+              <Modal.Header closeButton>
+                <Modal.Title>Créer une activité</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={handleSubmit}>
+                  <div className="row mb-4">
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Niveau scolaire</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input1}
+                          onChange={(e) => setInput1(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Matière</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input2}
+                          onChange={(e) => setInput2(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Leçon</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input3}
+                          onChange={(e) => setInput3(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                  </div>
+                  <div className="row mb-4">
+                    <div className="col-4">
+                      <Form.Group>
+                        <Form.Label>Titre</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input4}
+                          onChange={(e) => setInput4(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                    {resources.map((resource, index) => (
+                      <div key={index} className="col-4">
+                        <Form.Group>
+                          <Form.Label>Ajouter ressources</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={resource}
+                            onChange={(e) => {
+                              const updatedResources = [...resources];
+                              updatedResources[index] = e.target.value;
+                              setResources(updatedResources);
+                            }}
+                          />
+                        </Form.Group>
+                        <Button
+                          variant="primary"
+                          onClick={() => handleRemoveResource(index)}
+                          style={{
+                            backgroundColor: '#FF0000',
+                            marginTop: '8px',
+                            padding: '4px 8px',
+                            fontSize: '12px',
+                          }}
+                        >
+                          -
+                        </Button>
+                      </div>
+                    ))}
+                    <div className="col-4">
+                      <Form.Group>
+                        <Form.Label>Ressource</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input5}
+                          onChange={(e) => setInput5(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        onClick={handleAddResource}
+                        style={{
+                          backgroundColor: '#0BA7AA',
+                          marginTop: '8px',
+                          padding: '4px 8px',
+                          fontSize: '12px',
+                          color:"white",
+                        }}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Activité</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          rows={8}
+                          value={textareaValue}
+                          placeholder="Tapez ici le contenu d'activité..."
+                          onChange={(e) => setTextareaValue(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                  </div>
+                  <div className="row mt-4">
+                    <div className="col d-flex justify-content-center">
+                      <Button type="submit" variant="primary" style={{ backgroundColor: '#0BA7AA',color:"white" }}>
+                        Envoyer
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
+              </Modal.Body>
+              {/*{successAlert && (
+                <Alert variant="success" onClose={() => setSuccessAlert(false)} dismissible>
+                  Activity created successfully!
+                </Alert>
+              )}*/}
+            </Modal>
+
+             {/* Modal edit */}
+            <Modal show={showEditModal} onHide={() => setShowEditModal(false)} size="lg">
+              <Modal.Header closeButton>
+                <Modal.Title>Modifier une activité</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={handleEditSubmit}>
+                  {/* Contenu Form edit */}
+                  <div className="row mb-4">
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Niveau scolaire</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input1}
+                          onChange={(e) => setInput1(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Matière</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input2}
+                          onChange={(e) => setInput2(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Leçon</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input3}
+                          onChange={(e) => setInput3(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                  </div>
+                  <div>
+                  <div className="row mb-4">
+                    <div className="col-4">
+                      <Form.Group>
+                        <Form.Label>Titre</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input4}
+                          onChange={(e) => setInput4(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                    {resources.map((resource, index) => (
+                      <div key={index} className="col-4">
+                        <Form.Group>
+                          <Form.Label>Ajouter ressources</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={resource}
+                            onChange={(e) => {
+                              const updatedResources = [...resources];
+                              updatedResources[index] = e.target.value;
+                              setResources(updatedResources);
+                            }}
+                          />
+                        </Form.Group>
+                        <Button variant="primary" onClick={() => handleRemoveResource(index)} style={{ backgroundColor: "#FF0000", marginTop: "8px", padding: "4px 8px", fontSize: "12px" }}>-</Button>
+                      </div>
+                    ))}
+                    <div className="col-4">
+                      <Form.Group>
+                        <Form.Label>Ressource</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={input5}
+                          onChange={(e) => setInput5(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Button type="button" variant="primary" onClick={handleAddResource} style={{ backgroundColor: "#0BA7AA", marginTop: "8px", padding: "4px 8px", fontSize: "12px" }}>+</Button>
+                    </div>
+                  </div>
+                </div>
+                  <div className="row">
+                    <div className="col">
+                      <Form.Group>
+                        <Form.Label>Activité</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          rows={8}
+                          value={textareaValue}
+                          placeholder="Tapez ici le contenu d'activité..."
+                          onChange={(e) => setTextareaValue(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
+                  </div>
+                  <div className="row mt-4">
+                    <div className="col d-flex justify-content-center">
+                      <Button type="submit" variant="primary" style={{backgroundColor:"#0BA7AA"}}>Envoyer</Button>
+                    </div>
+                  </div>
+                </Form>
+              </Modal.Body>
+            </Modal>
+
+
    </section>
       )}
       {activeTab === "Mes évaluations" && (
@@ -371,7 +639,7 @@ const Dashboard = () => {
              </div>  
                <div class="col-sm-5 offset-sm-2 mt-5 mb-4 text-gred" style={{color:"green"}}><h2><b>Liste des évaluations crées</b></h2></div>
                <div class="col-sm-2 offset-sm-1  mt-5 mb-4 text-gred">
-               <Button variant="primary" onClick="" style={{ backgroundColor: "#0BA7AA",borderColor:"#0BA7AA"}}>
+               <Button variant="primary" onClick="" style={{ backgroundColor: "#0BA7AA" ,color:"white",borderColor:"#0BA7AA"}}>
                   créer évaluation
                </Button>
               </div>

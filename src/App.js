@@ -16,6 +16,9 @@ import Contact from './pages/Contact';
 import Register from './components/register'
 import Premium from './pages/Premieum';
 import Dashboard from './pages/Dashboard';
+import Getactivities from './pages/getactivities';
+import { ActivityProvider } from './utils/ActivityContext';
+import Activitie from './pages/Activities'
 //const apilink ='http://api.openweathermap.org/data/2.5/weather?q=cairo%2Cegypt&appid=e36ed364400282e43250b6c4c0274d44'
 class App extends Component {
 
@@ -23,6 +26,7 @@ class App extends Component {
     return (
       <div className="App">
         <AuthProvider>
+        <ActivityProvider>
           <Header2 />
           <Routes>
             <Route element={<Login></Login>} path="/login" />
@@ -30,15 +34,20 @@ class App extends Component {
             <Route element={<Register></Register>} path="/register" />
             <Route element={<Premium></Premium>} path="/premiem" />
             <Route element={<Dashboard></Dashboard>} path="/dashboard" />
-
+            <Route element={<Activitie></Activitie>} path="/Activitie" />
+            <Route element={<Getactivities></Getactivities>} path="/getActivitie" />
             <Route exact path='/' element={<PrivateRoute />}>
               <Route exact path='/' element={<Home />} />
+             
+              <Route path="/dashboard" component={Dashboard} />
+                
             </Route>
 
           </Routes>
           <Footer2></Footer2>
+          </ActivityProvider>
         </AuthProvider>
-
+          
 
       </div>
     );
