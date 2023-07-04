@@ -455,3 +455,30 @@ nav .profile-details i{
     width: calc(100% - 60px);
   }
 }
+
+.bouton-etape {
+  /* Styles de base pour les boutons des étapes */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.bouton-etape.active {
+  /* Styles pour le bouton de l'étape active */
+  background-color: #0BA7AA;
+  color: #fff;
+}
+.boutons-etapes {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.boutons-etapes .col {
+  margin-right: 10px; /* Ajoutez l'espace souhaité entre les boutons */
+}
+
