@@ -3,12 +3,11 @@ import "./Dashboard.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form';
-import axiosInstance from '../axios';
+import axios from '../axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { ActivityContext, ActivityProvider } from '../utils/ActivityContext';
 import { useNavigate } from 'react-router-dom';
 import Getactivities from './getactivities';
-import Activitie from './Activities';
 import Alert from 'react-bootstrap/Alert';
 
 
@@ -73,6 +72,26 @@ const Dashboard = () => {
     setShowEditModal(false);
   };
 
+
+  const handleDelete = () => {
+    setShowConfirmation(true);
+  };
+  
+  const handleConfirmDelete = () => {
+  
+    axios.delete('/api/data') 
+      .then(response => {
+        console.log('Données supprimées avec succès');
+      })
+      .catch(error => {
+        console.error('Une erreur s\'est produite lors de la suppression des données :', error);
+      });
+  
+    setShowConfirmation(false);
+  };
+
+  const [showConfirmation, setShowConfirmation] = useState(false); 
+  
 /////////////////////
 
 const [activities, setActivities] = useState([]);
@@ -354,7 +373,38 @@ useEffect(() => {
                                   </tr>
                               </thead>
                               <tbody>
-                                {activities.map((activity, index) => (
+                              <tr>
+                              <td>1</td>
+                              <td>Activité01</td>
+                              <td>1APIC</td>
+                              <td>Structure d'un ordinateur</td>
+                              <td>01/10/2023</td>
+                              <td>
+                                 <a href="#" class="view" title="View" data-toggle="tooltip" style={{color:"#0BA7AA"}}><i class="material-icons">&#xE417;</i></a>
+                                  <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons" onClick={handleEdit}>&#xE254;</i></a>
+                                  <a href="#" class="delete" title="Delete" data-toggle="tooltip" style={{color:"red"}} onClick={handleDelete}><i class="material-icons">&#xE872;</i></a>
+                                   
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>2</td>
+                              <td>Activité02</td>
+                              <td>2APIC</td>
+                              <td>Tableur</td>
+                              <td>12/02/2023</td>
+                              <td>
+                                      <a href="#" className="view" title="View" data-toggle="tooltip" style={{ color: "#0BA7AA" }}>
+                                        <i className="material-icons">&#xE417;</i>
+                                      </a>
+                                      <a href="#" className="edit" title="Edit" data-toggle="tooltip" onClick={handleEdit}>
+                                        <i className="material-icons">&#xE254;</i>
+                                      </a>
+                                      <a href="#" className="delete" title="Delete" data-toggle="tooltip" style={{ color: "red" }} onClick={handleDelete}>
+                                        <i className="material-icons">&#xE872;</i>
+                                      </a>
+                                    </td>
+                          </tr>
+                                {/*{activities.map((activity, index) => (
                                   <tr key={index}>
                                     <td>{activity.id}</td>
                                     <td>{activity.nom}</td>
@@ -373,7 +423,7 @@ useEffect(() => {
                                       </a>
                                     </td>
                                   </tr>
-                                ))}
+                                ))}*/}
                               </tbody>
 
                       </table>
@@ -454,6 +504,7 @@ useEffect(() => {
                             marginTop: '8px',
                             padding: '4px 8px',
                             fontSize: '12px',
+                            color:"white",
                           }}
                         >
                           -
@@ -501,7 +552,7 @@ useEffect(() => {
                   </div>
                   <div className="row mt-4">
                     <div className="col d-flex justify-content-center">
-                      <Button type="submit" variant="primary" style={{ backgroundColor: '#0BA7AA',color:"white" }}>
+                      <Button type="submit" variant="primary" style={{ backgroundColor: '#0BA7AA',color:"white" }} onClick={handleSubmit}>
                         Envoyer
                       </Button>
                     </div>
@@ -581,7 +632,7 @@ useEffect(() => {
                             }}
                           />
                         </Form.Group>
-                        <Button variant="primary" onClick={() => handleRemoveResource(index)} style={{ backgroundColor: "#FF0000", marginTop: "8px", padding: "4px 8px", fontSize: "12px" }}>-</Button>
+                        <Button variant="primary" onClick={() => handleRemoveResource(index)} style={{ backgroundColor: "#FF0000", color:"white",marginTop: "8px", padding: "4px 8px", fontSize: "12px" }}>-</Button>
                       </div>
                     ))}
                     <div className="col-4">
@@ -593,9 +644,10 @@ useEffect(() => {
                           onChange={(e) => setInput5(e.target.value)}
                         />
                       </Form.Group>
-                      <Button type="button" variant="primary" onClick={handleAddResource} style={{ backgroundColor: "#0BA7AA", marginTop: "8px", padding: "4px 8px", fontSize: "12px" }}>+</Button>
+                      <Button type="button" variant="primary" onClick={handleAddResource} style={{ backgroundColor: "#0BA7AA", color:"white",marginTop: "8px", padding: "4px 8px", fontSize: "12px" }}>+</Button>
                     </div>
                   </div>
+                          
                 </div>
                   <div className="row">
                     <div className="col">
@@ -613,13 +665,32 @@ useEffect(() => {
                   </div>
                   <div className="row mt-4">
                     <div className="col d-flex justify-content-center">
-                      <Button type="submit" variant="primary" style={{backgroundColor:"#0BA7AA"}}>Envoyer</Button>
+                      <Button type="submit" variant="primary" style={{ backgroundColor: '#0BA7AA',color:"white" }} >Envoyer</Button>
                     </div>
                   </div>
                 </Form>
               </Modal.Body>
             </Modal>
 
+            {/* Modal supprimer */}
+            <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirmation de suppression</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Êtes-vous sûr de vouloir le supprimer ?
+                </Modal.Body>
+                <Modal.Footer>
+                  <div>
+                    <Button variant="secondary" onClick={() => setShowConfirmation(false)} style={{ color: 'black',border: '1px solid black' }}>
+                      Annuler
+                    </Button>
+                  </div>
+                    <Button variant="danger" onClick={handleConfirmDelete} style={{ backgroundColor: '#0BA7AA',color:"white" }}>
+                      Supprimer
+                    </Button>
+                </Modal.Footer>
+              </Modal>
 
    </section>
       )}
