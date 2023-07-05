@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  /* background-color: rgb(170, 167, 162); */
+  
+}
+
+.titre{
+font-family: Georgia, 'Times New Roman', Times, serif;
+/* justify-content: right;
+align-items: right; */
+color: rgb(57, 233, 209);
+font-size: xx-large;
+text-align: right;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+nav {
+  display: flex;
+  margin: 1rem auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+button {
+  background-color: #9c6c6c;
+  border: none;
+  color: #000;
+  padding: 1rem;
+  list-style: none;
+  font-size: 1.3rem;
+  margin: 0.7rem;
+  border-radius: 20%;
+  cursor: pointer;
+}
+
+.previous {
+  background-color:rgb(210, 216, 216);
+  color: rgb(18, 19, 18);
+}
+
+.next {
+  background-color: #0f4ea7;
+  color: rgb(18, 19, 18);
+}
+
+#t {
+  font-size: 1.3rem;
+  background-color: #e6c4db;
+  padding: 1rem;
+}
+
+#y{
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: x-large;
+  color:#0f4ea7;
+}
