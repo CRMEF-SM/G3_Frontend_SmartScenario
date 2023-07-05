@@ -23,7 +23,7 @@ const App = () => {
         <h1>Smart Scénario</h1>
       </nav>
       <nav className="parag">
-      <p id="y">Visualiser vos scénarios pégagogique avec plus de créativité</p>
+        <p id="y">Visualiser vos scénarios pégagogique avec plus de créativité</p>
       </nav>
       <nav>
         <button onClick={goToPrevPage} className="previous">
