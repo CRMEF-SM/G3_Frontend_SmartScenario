@@ -437,7 +437,6 @@ useEffect(() => {
   
         </div>    
         </div>  
-      
       <div className="sidebar" style={{ float: 'left', width: '22%' }}/>
       <Modal show={show} onHide={handleClose} size="lg" className="modal-fullscreen">
         <Modal.Header closeButton>
