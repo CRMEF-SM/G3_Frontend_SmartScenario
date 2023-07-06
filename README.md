@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 080021d0f09e2c39b6c58a1b49335fedc7ad3154
+# React-PDF Example Project
+
+This application uses [`react-pdf`](https://github.com/wojtekmaj/react-pdf) to display PDF files. You can follow along with the [accompanying blog post](https://pspdfkit.com/blog/2021/how-to-build-a-reactjs-pdf-viewer-with-react-pdf/).
+
+## Installation
+
+```bash
+git clone https://github.com/PSPDFKit-labs/react-pdf-demo
+cd react-pdf-demo
+
+npm install 
+npm start
+```
+<<<<<<< HEAD
+=======
+=======
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -7,10 +27,23 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the project directory, you can run:
 
 ### `npm start`
+>>>>>>> 5d5ef5a9a0ced4d1ec7c196f57080f700f1bccc2
+>>>>>>> 080021d0f09e2c39b6c58a1b49335fedc7ad3154
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 080021d0f09e2c39b6c58a1b49335fedc7ad3154
+
+## Contributing
+
+Please ensure you have signed our [CLA](https://pspdfkit.com/guides/web/miscellaneous/contributing/) so that we can accept your contributions.
+<<<<<<< HEAD
+=======
+=======
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
@@ -68,3 +101,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+>>>>>>> 5d5ef5a9a0ced4d1ec7c196f57080f700f1bccc2
+>>>>>>> 080021d0f09e2c39b6c58a1b49335fedc7ad3154
