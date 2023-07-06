@@ -69,11 +69,39 @@ const Dashboard = () => {
     setAutresTextareas(updatedTextareas);
   };
 
+  const [Etablissement, setEtablissement] = useState('');
+  const [Matiere, setMatiere] = useState('');
+  const [Leçon, setLeçon] = useState('');
+  const [NombreHeures, setNombreHeures] = useState('');
+  const [CompétenceVisée, setCompétenceVisée] = useState('');
+  const [MéthodeEnseignement, setMéthodeEnseignement] = useState('');
+  const [ObjectifsPédagogiques, setObjectifsPédagogiques] = useState('');
   const [duree, setDuree] = useState('');
   const [roleEnseignant, setRoleEnseignant] = useState('');
   const [roleApprenant, setRoleApprenant] = useState('');
   const [autresChamps, setAutresChamps] = useState([]);
 
+  const handleEtablissementChange = (event) => {
+    setEtablissement(event.target.value);
+  };
+  const handleMatiereChange = (event) => {
+    setMatiere(event.target.value);
+  };
+  const handleLeçonChange = (event) => {
+    setLeçon(event.target.value);
+  };
+  const handleNombreHeuresChange = (event) => {
+    setNombreHeures(event.target.value);
+  };
+  const handleCompétenceViséeChange = (event) => {
+    setCompétenceVisée(event.target.value);
+  };
+  const handleMéthodeEnseignementChange = (event) => {
+    setMéthodeEnseignement(event.target.value);
+  };
+  const handleObjectifsPédagogiquesChange = (event) => {
+    setObjectifsPédagogiques(event.target.value);
+  };
   const handleDureeChange = (event) => {
     setDuree(event.target.value);
   };
@@ -86,8 +114,9 @@ const Dashboard = () => {
     setRoleApprenant(event.target.value);
   };
 
+
   const addChamp = () => {
-    setAutresChamps([...autresChamps, { duree: '', roleEnseignant: '', roleApprenant: '' }]);
+    setAutresChamps([...autresChamps, { ObjectifsPédagogiques: '', duree: '', roleEnseignant: '', roleApprenant: '' }]);
   };
 
   const handleAutreChampChange = (index, field, event) => {
@@ -95,25 +124,8 @@ const Dashboard = () => {
     updatedChamps[index][field] = event.target.value;
     setAutresChamps(updatedChamps);
   };
-  const initialInputs = [
-    { name: 'Etablissement', placeholder: 'Votre établissement', value: '', duplicated: false },
-    { name: 'Matière', placeholder: 'Matière', value: '', duplicated: false },
-    { name: 'Leçon', placeholder: 'Leçon', value: '', duplicated: false },
-    { name: 'Nombre d\'heures', placeholder: 'Nombre d\'heures', value: '', duplicated: false },
-    { name: 'Compétence visée', placeholder: 'Compétence visée', value: '', duplicated: false },
-    { name: 'Méthode d\'enseignement', placeholder: 'Méthode d\'enseignement', value: '', duplicated: false },
-    { name: 'Objectifs pédagogiques', placeholder: 'Objectifs pédagogiques', value: '', duplicated: false }
-  ];
-  const addObjective = () => {
-    setInputs(prevInputs => [
-      ...prevInputs,
-      { name: 'Objectifs pédagogiques', placeholder: 'Objectifs pédagogiques', value: '', duplicated: false }
-    ]);
-  };
-  const [inputs, setInputs] = useState(initialInputs);
-  const removeObjective = index => {
-    setInputs(prevInputs => prevInputs.filter((input, i) => i !== index));
-  };
+
+ 
   const removeTextarea = (index) => {
     const updatedTextareas = [...autresTextareas];
     updatedTextareas.splice(index, 1);
@@ -464,116 +476,118 @@ useEffect(() => {
   <form onSubmit={handleSubmit}>
     <div className="row mb-3">
       <div className="col-4 mb-3">
-        <label htmlFor={inputs[0].name}><strong>{inputs[0].name}</strong></label>
+        <label htmlFor="Etablissement"><strong>Etablissement</strong></label>
         <input
           type="text"
           className="form-control"
-          name={inputs[0].name}
-          placeholder={inputs[0].placeholder}
-          value={inputs[0].value}
-          onChange={(event) => handleInputChange(0, event)}
+          name="Etablissement"
+          placeholder="Etablissement"
+          value={Etablissement}
+          onChange={handleEtablissementChange}
         />
       </div>
       <div className="col-4 mb-3">
-        <label htmlFor={inputs[1].name}><strong>{inputs[1].name}</strong></label>
+        <label htmlFor="Matière"><strong>Matière</strong></label>
         <input
           type="text"
           className="form-control"
-          name={inputs[1].name}
-          placeholder={inputs[1].placeholder}
-          value={inputs[1].value}
-          onChange={(event) => handleInputChange(1, event)}
+          name="Matière"
+          placeholder="Matière"
+          value={Matiere}
+          onChange={handleMatiereChange}
         />
       </div>
       <div className="col-4 mb-3">
-        <label htmlFor={inputs[2].name}><strong>{inputs[2].name}</strong></label>
+        <label htmlFor="Leçon"><strong>Leçon</strong></label>
         <input
           type="text"
           className="form-control"
-          name={inputs[2].name}
-          placeholder={inputs[2].placeholder}
-          value={inputs[2].value}
-          onChange={(event) => handleInputChange(2, event)}
+          name="Leçon"
+          placeholder="Leçon"
+          value={Leçon}
+          onChange={handleLeçonChange}
         />
       </div>
     </div>
     <div className="row mb-3">
       <div className="col-6 mb-3">
-        <label htmlFor={inputs[3].name}><strong>{inputs[3].name}</strong></label>
+        <label htmlFor="Nombre d'heures"><strong>Nombre d'heures</strong></label>
         <input
           type="text"
           className="form-control"
-          name={inputs[3].name}
-          placeholder={inputs[3].placeholder}
-          value={inputs[3].value}
-          onChange={(event) => handleInputChange(3, event)}
+          name="Nombre d'heures"
+          placeholder="Nombre d'heures"
+          value={NombreHeures}
+          onChange={handleNombreHeuresChange}
         />
       </div>
       <div className="col-6 mb-3">
-        <label htmlFor={inputs[4].name}><strong>{inputs[4].name}</strong></label>
+        <label htmlFor="Compétence visée"><strong>Compétence visée</strong></label>
         <input
           type="text"
           className="form-control"
-          name={inputs[4].name}
-          placeholder={inputs[4].placeholder}
-          value={inputs[4].value}
-          onChange={(event) => handleInputChange(4, event)}
+          name="Compétence visée"
+          placeholder="Compétence visée"
+          value={CompétenceVisée}
+          onChange={handleCompétenceViséeChange}
         />
       </div>
     </div>
     <div className="row mb-3">
       <div className="col-6 mb-3">
-        <label htmlFor={inputs[5].name}><strong>{inputs[5].name}</strong></label>
+        <label htmlFor="Méthode d'enseignement"><strong>Méthode d'enseignement</strong></label>
         <input
           type="text"
           className="form-control"
-          name={inputs[5].name}
-          placeholder={inputs[5].placeholder}
-          value={inputs[5].value}
-          onChange={(event) => handleInputChange(5, event)}
+          name="Méthode d'enseignement"
+          placeholder="Méthode d'enseignement"
+          value={MéthodeEnseignement}
+          onChange={handleMéthodeEnseignementChange}
         />
       </div>
       <div className="col-6 mb-3">
         <div className="d-flex align-items-end">
-          <label htmlFor={inputs[6].name}><strong>{inputs[6].name}</strong></label>
-          <button type="button" className="btn btn-primary btn-sm" onClick={addObjective}>
-            <i className="bi bi-plus"></i>
-          </button>
+          <label htmlFor="Objectifs pédagogiques"><strong>Objectifs pédagogiques</strong></label>
         </div>
         
         <input
           type="text"
           className="form-control"
-          name={inputs[6].name}
-          placeholder={inputs[6].placeholder}
-          value={inputs[6].value}
-          onChange={(event) => handleInputChange(6, event)}
+          name="Objectifs pédagogiques"
+          placeholder="Objectifs pédagogiques"
+          value={ObjectifsPédagogiques}
+          onChange={handleObjectifsPédagogiquesChange}
         />
       </div>
     </div>
-    {inputs.slice(7).map((input, index) => (
+    {autresChamps.map((champ, index) => (
       <div className="row mb-3" key={index}>
-        <div className="col-6 mb-3">
-          <label htmlFor={input.name}><strong>{input.name}</strong></label>
+        <div className="col-4">
           <input
             type="text"
             className="form-control"
-            name={input.name}
-            placeholder={input.placeholder}
-            value={input.value}
-            onChange={(event) => handleInputChange(index + 7, event)}
+            name={`autreChampObjectifsPédagogiques${index}`}
+            placeholder="Objectifs pédagogiques"
+            value={champ.ObjectifsPédagogiques}
+            onChange={(event) => handleAutreChampChange(index, "ObjectifsPédagogiques" , event)}
           />
-        </div>
-        <div className="col-6 mb-3">
-          <button type="button" className="btn btn-danger btn-sm" onClick={() => removeObjective(index + 7)}>
+        </div>    
+        <div className="col-1">
+          <button type="button" className="btn btn-danger btn-sm" onClick={() => removeChamp(index)}>
             <i className="bi bi-x"></i>
           </button>
-          
         </div>
       </div>
     ))}
+    <div className="row mb-3">
+      <div className="col-12">
+        <button type="button" className="btn btn-secondary" onClick={addChamp}>
+          +
+        </button>
+      </div>
+    </div>
   </form>
-)}
+)}	     	
           {currentStep === 2 && (
             <form onSubmit={handleSubmit}>
               {/* Contenu de la deuxième étape du formulaire */}
