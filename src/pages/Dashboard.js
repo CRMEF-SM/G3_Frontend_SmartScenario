@@ -3,6 +3,9 @@ import "./Dashboard.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button';
+import Profil from './profil'
+
+
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Accueil");
@@ -10,38 +13,6 @@ const Dashboard = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const initialInputs = [
-    { name: 'etablissement', placeholder: 'Votre établissement', value: '', duplicated: false },
-    { name: 'cours', placeholder: 'Le cours', value: '', duplicated: false },
-    { name: 'nbHeures', placeholder: 'Le nombre d\'heure', value: '', duplicated: false },
-    { name: 'Compétence_visée', placeholder: 'La compétence visée', value: '', duplicated: false },
-    { name: 'objectifs_pédagogiques', placeholder: 'Objectifs pédagogiques', value: '', duplicated: false },
-    { name: 'durée', placeholder: 'Durée', value: '', duplicated: false },
-    { name: 'activités_apprenant', placeholder: 'Activités apprenant', value: '', duplicated: false },
-    { name: 'activités_enseignant', placeholder: 'Activités enseignant', value: '', duplicated: false }
-  ];
-  
-  const [inputs, setInputs] = useState(initialInputs);
-  
-  const handleInputChange = (index, event) => {
-    const updatedInputs = [...inputs];
-    updatedInputs[index].value = event.target.value;
-    setInputs(updatedInputs);
-  };
-  
-  const addInputRow = (index) => {
-    const updatedInputs = [...inputs];
-    const newInput = { ...inputs[index], duplicated: true };
-    updatedInputs.splice(index + 1, 0, newInput);
-    setInputs(updatedInputs);
-  };
-  
-  const removeInputRow = (index) => {
-    const updatedInputs = [...inputs];
-    updatedInputs.splice(index, 1);
-    setInputs(updatedInputs);
-  };
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -86,11 +57,12 @@ const Dashboard = () => {
         </a>
       </li>
       <li>
-        <a href="#" className={activeTab === "Modifier profil" ? "active" : ""} onClick={() => setActiveTab("Modifier profil")}>
-          <i className="bx bx-coin-stack" />
+        <a href="/modifier_profil" className={activeTab === "Mes évaluations" ? "active" : ""} onClick={() => setActiveTab("Mes évaluations")}>
+          <i className="bx bx-pie-chart-alt-2" />
           <span className="links_name">Modifier profil</span>
         </a>
       </li>
+      
       <li>
         <a href="#" className={activeTab === "A l’aide de Gpt" ? "active" : ""} onClick={() => setActiveTab("A l’aide de Gpt")}>
           <i className="bx bx-book-alt" />
@@ -116,11 +88,9 @@ const Dashboard = () => {
             <input type="text" placeholder="Rechercher..." />
             <i className="bx bx-search" />
           </div>
-          <div className="profile-details">
-            <img src="images/profile.jpg" alt="" />
-            <span className="admin_name">Saida Ouachhal</span>
-            <i className="bx bx-chevron-down" />
-          </div>
+          {/* Inclure le profil */}
+          <Profil />
+          
         </nav>
         <div className="home-content">
           {/* Votre contenu ici */}
@@ -208,78 +178,6 @@ const Dashboard = () => {
   
         </div>    
         </div>  
-        <Modal show={show} onHide={handleClose} size="lg" className="modal-fullscreen">
-            <Modal.Header closeButton>
-              <Modal.Title>Créer un scénario pédagogique</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <form onSubmit={handleSubmit}>
-                {inputs.map((input, index) => (
-                  <div className="row mb-3" key={index}>
-                    <div className="col-4">
-                      <input
-                        type="text"
-                        className="form-control"
-                        name={input.name}
-                        placeholder={input.placeholder}
-                        value={input.value}
-                        onChange={(event) => handleInputChange(index, event)}
-                      />
-                    </div>
-                    {input.duplicated && (
-                      <div className="col-4">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name={input.name + index} // Utilisation de l'index pour le nom unique
-                          placeholder={input.placeholder}
-                          value={input.value}
-                          onChange={(event) => handleInputChange(index, event)}
-                        />
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger btn-sm"
-                          onClick={() => removeInputRow(index)}
-                        >
-                          x
-                        </button>
-                      </div>
-                    )}
-                    <div className="col-4">
-                      {!input.duplicated && index >= 4 && (
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-sm"
-                          onClick={() => addInputRow(index)}
-                        >
-                          +
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-                <button
-                  type="submit"
-                  className="btn btn-success mt-4"
-                  style={{ backgroundColor: '#0BA7AA', borderColor: '#0BA7AA' }}
-                >
-                  Créer
-                </button>
-              </form>
-
-
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Fermer
-              </Button>
-              <Button variant="primary" onClick={handleClose}>
-                Sauvegarder
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-
   </section>
   
       )}
@@ -429,6 +327,7 @@ const Dashboard = () => {
       )}
       {activeTab === "Modifier profil" && (
         {/* Contenu de l'onglet Modifier profil */}
+        
       )}
       {activeTab === "A l’aide de Gpt" && (
         {/* Contenu de l'onglet A l’aide de Gpt */}

@@ -1,0 +1,75 @@
+body {
+    background: #ffffff;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8;
+  }
+  .profile-button {
+    background: #007bff; 
+    color: #ffffff; 
+    border: none; 
+    padding: 8px 16px; 
+    font-size: 14px; 
+    cursor: pointer; 
+  }
+  
+  .profile-button:hover {
+    background: #0056b3; 
+  }
+  
+  .profile-button:focus {
+    background: #0056b3; 
+    outline: none; 
+  }
+  
+  .profile-button:active {
+    background: #003c80; 
+  }
+  
+  .cancel-button {
+    background: #6c757d; 
+    color: #ffffff; 
+    border: none; 
+    padding: 8px 16px; 
+    font-size: 14px; 
+    cursor: pointer; 
+  }
+  
+  .cancel-button:hover {
+    background: #5a6268; 
+  }
+  
+  .cancel-button:focus {
+    background: #5a6268; 
+    outline: none; 
+  }
+  
+  .cancel-button:active {
+    background: #424b52;
+  }
+  .button-container button {
+    margin-right: 10px; 
+  }  
+  .back:hover {
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .labels {
+    font-size: 11px;
+  }
+  
+  .add-experience:hover {
+    background: #ffffff;
+    color: #ffffff;
+    cursor: pointer;
+    border: solid 1px #ffffff;
+  }
+  
+
+
+
+
+  
